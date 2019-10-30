@@ -18,14 +18,14 @@ const parseXML = (e) =>{
   const dom = parser.parseFromString(xml, 'text/xml');
   const measureArray = dom.querySelectorAll("measure");
 
-  //imaginary bar line 
+  //imaginary bar line check
   Array.from(measureArray).forEach((measure) => {
     let totalDuration = 0;
     let checkFlag = false;
     const durationArray = measure.querySelectorAll("duration");
     durationArray.forEach((duration) => {
       const noteDuration = Number(duration.textContent);
-      //全音符はimaginary bar line errorではない
+      //全音符はimaginary bar line checkから外す
       if(noteDuration === 48){
         checkFlag = true;
       }
@@ -41,7 +41,7 @@ ${measure.closest("part").getAttribute("id")}パート / ${measure.getAttribute(
     }
   });
 
-  //歌詞入力欠けエラー(今回はベースパートを除外)
+  //歌詞入力欠けチェック(ベースパートを除外)
   Array.from(measureArray)
   .filter((measure) => {
     return measure.closest("part").getAttribute("id") !== "P5";

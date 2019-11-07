@@ -1,23 +1,32 @@
-const dropMusicxmlArea = document.getElementById("dropMusicxmlArea");
-dropMusicxmlArea.addEventListener("dragenter", (evt) => {cancelEvent(evt)});
-dropMusicxmlArea.addEventListener("dragover", (evt) => {cancelEvent(evt)});
-dropMusicxmlArea.addEventListener("drop", (evt) => {handleDroppedFile(evt)});
+const vm = new Vue({
+  data: {
+    lintResultObjList: [],
+    lintResultPerfect: "0"
+  },
+  methods: {
+    cancelEvent(evt){
+      evt.preventDefault();
+      evt.stopPropagation();
+      return false;
+    },
+    handleDroppedFile(evt){
+      this.lintResultPerfect = "0";
 
-// 後続eventキャンセル
-const cancelEvent = (evt) => {
-  evt.preventDefault();
-  evt.stopPropagation();
-  return false;
-};
+      const fileList = evt.dataTransfer.files;
+      if(!fileList) return;
+      const file = fileList[0];
+      if(!file) return;
 
-// drop event
-const handleDroppedFile = (evt) => {
-  const fileList = evt.dataTransfer.files;
-  if(!fileList) return;
-  const file = fileList[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.addEventListener('load', parseXML, false);
-  reader.readAsText(file);
-  cancelEvent(evt);
-};
+      const reader = new FileReader();
+      reader.addEventListener('load', this.fetchLintResult, false);
+      reader.readAsText(file);
+      this.cancelEvent(evt);
+    },
+    fetchLintResult(evt){
+      this.lintResultObjList = lintMusicXml(evt);
+      if(this.lintResultObjList.length === 0){
+        this.lintResultPerfect = "1";
+      }
+    }
+  }
+}).$mount("#lintMusicxmlApp");

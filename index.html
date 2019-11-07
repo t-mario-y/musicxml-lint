@@ -4,15 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/milligram/milligram@master/dist/milligram.css">
-  <title>MusicXML parse</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+  <title>Lint MusicXML</title>
 </head>
 <body>
-  <h1>MusicXML解析</h1>
-  <div id="dropMusicxmlArea" style="border: gray solid 1em; padding: 2em;">
-    楽譜ファイルをDrag & Drop
+  <div id="lintMusicxmlApp">
+    <div class="container">
+      <h1 class="title">MusicXML校正</h1>
+      <div id="dropMusicxmlArea" style="border: gray solid 1em; padding: 2em;" 
+        v-on:dragenter="cancelEvent" v-on:dragover="cancelEvent" v-on:drop="handleDroppedFile">
+        楽譜ファイルをDrag & Drop
+      </div>
+      <h2 class="title">校正結果</h2>
+      <ul>
+        <li v-for="item in lintResultObjList">
+          {{item.violartionKind}} @ {{item.partName}}の{{item.measurePlace}}小節目
+        </li>
+      </ul>
+      <p class="subtitle" v-show="lintResultPerfect === '1'">とっても読みやすい楽譜です</p>
+    </div>
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script src="./main.js"></script>
-  <script src="./checkMusicxml.js"></script>
+  <script src="./lintMusicxml.js"></script>
 </body>
 </html>
